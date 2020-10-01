@@ -1,8 +1,6 @@
 class Solution:
-    # O(N^2) O(1)
     def longestPalindrome(self, s: str) -> str:
-        res = ''
-        l = r = 0
+        L = R = l = r = 0
 
         while r < len(s):
             if l == r:
@@ -14,10 +12,10 @@ class Solution:
                         l -= 1
 
             if 0 <= l and s[l] == s[r]:
-                res = max(s[l:r+1], res, key=len)
+                L, R = (l, r+1) if ((r+1)-l > R-L) else (L, R)
                 r += 1
                 l -= 1
             else:
                 l = r = (r + l) // 2 + 1  # going to midle +1 step
 
-        return res
+        return s[L:R]
