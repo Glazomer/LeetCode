@@ -1,4 +1,4 @@
-export default class Heap {
+export default class MinHeap {
   #heap: number[];
 
   #parent = (i: number): number => Math.floor((i - 2) / 2);

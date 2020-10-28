@@ -1,4 +1,4 @@
-export default class Heap {
+export default class MaxHeap {
   #heap;
 
   #parent = (i) => Math.floor((i - 2) / 2);
