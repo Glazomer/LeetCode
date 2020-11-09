@@ -1,45 +1,41 @@
-export default class Heap {
-  #heap: number[];
+export default class MinHeap {
+  #heap;
 
-  // shortcuts
-  #parent = (i: number): number => Math.floor((i - 2) / 2);
-  #left = (i: number): number => i * 2 + 1;
-  #right = (i: number): number => i * 2 + 2;
+  #parent = (i) => Math.floor((i - 2) / 2);
+  #left = (i) => i * 2 + 1;
+  #right = (i) => i * 2 + 2;
 
-  constructor(heap: number[] = []) {
+  constructor(heap = []) {
     this.#heap = heap;
-    for (let i = heap.length - 1; i >= 0; --i) {
-      this.#heapifyBottom(i);
-    }
+    heap.reduceRight((_, __, i) => this.#heapifyBottom(i));
   }
 
-  pop(): number {
+  pop() {
     const heap = this.#heap,
       result = heap[0],
       last = heap.pop();
-    if (last && heap.length) {
-      // checking var 'last', so tsling do not swear...
+    if (heap.length) {
       heap[0] = last;
       this.#heapifyBottom(0);
     }
     return result;
   }
 
-  push(num: number): void {
+  push(num) {
     this.#heap.push(num);
     this.#heapifyTop(this.#heap.length - 1);
   }
 
-  #heapifyBottom = (i: number): void => {
+  #heapifyBottom = (i) => {
     const heap = this.#heap;
 
     while (1) {
       const l = this.#left(i),
         r = this.#right(i);
-      if (r < heap.length && heap[r] < heap[i] && heap[r] < heap[l]) {
+      if (heap[r] < heap[i] && !(heap[r] > heap[l])) {
         [heap[i], heap[r]] = [heap[r], heap[i]];
         i = r;
-      } else if (l < heap.length && heap[l] < heap[i] && heap[l] < heap[r]) {
+      } else if (heap[l] < heap[i] && !(heap[l] > heap[r])) {
         [heap[i], heap[l]] = [heap[l], heap[i]];
         i = l;
       } else {
@@ -48,7 +44,7 @@ export default class Heap {
     }
   };
 
-  #heapifyTop = (i: number): void => {
+  #heapifyTop = (i) => {
     const heap = this.#heap;
 
     while (0 < i) {
@@ -60,13 +56,13 @@ export default class Heap {
     }
   };
 
-  get [Symbol.toStringTag](): string {
+  get [Symbol.toStringTag]() {
     return 'Heap';
   }
-  get [Symbol.iterator](): () => IterableIterator<number> {
+  get [Symbol.iterator]() {
     return this.#heap[Symbol.iterator].bind(this.#heap);
   }
-  get heap(): number[] {
+  get heap() {
     return [...this.#heap];
   }
 }
